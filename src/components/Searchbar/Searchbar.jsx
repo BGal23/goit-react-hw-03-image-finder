@@ -2,7 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import css from './search-bar.module.css';
 
-export class Searchbar extends Component {
+export class SearchBar extends Component {
   render() {
     const { searchItems } = this.props;
     return (
@@ -25,6 +25,6 @@ export class Searchbar extends Component {
   }
 }
 
-Searchbar.propTypes = {
+SearchBar.propTypes = {
   searchItems: PropTypes.func,
 };

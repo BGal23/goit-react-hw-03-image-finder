@@ -6,11 +6,11 @@ export class Button extends Component {
   render() {
     const { loadMore } = this.props;
     return (
-      <>
+      <div className={css.container}>
         <button onClick={loadMore} type="button" className={css.button}>
           Load more
         </button>
-      </>
+      </div>
     );
   }
 }
