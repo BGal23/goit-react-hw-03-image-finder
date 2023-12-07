@@ -4,7 +4,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
-import { SearchBar } from './SearchBar/SearchBar';
+import { SearchBar } from './Searchbar/Searchbar';
 import css from './app.module.css';
 import getAllItem from './importAPI';
 
