@@ -12,12 +12,13 @@ export class App extends Component {
   state = {
     images: [],
     isLoading: false,
+    searching: '',
     pageNr: 1,
     modal: false,
     modalImg: '',
     alt: '',
     btnMore: false,
-    message: false,
+    message: '',
   };
 
   searchItems = async event => {
@@ -25,21 +26,28 @@ export class App extends Component {
     const query = event.target[1].value;
 
     try {
-      this.setState({
+      await this.setState({
         isLoading: true,
         images: [],
         btnMore: false,
-        message: false,
+        message: '',
+        searching: query,
+        pageNr: 1,
       });
-      const images = await getAllItem(query, this.state.pageNr);
-      this.setState({ images: images });
+
+      const images = await getAllItem(this.state.searching, this.state.pageNr);
+      await this.setState({ images: images });
     } catch (error) {
-      console.log(error);
+      this.setState({ message: "Sorry, something's wrong" });
     } finally {
       this.setState(state =>
-        state.images.length > 0
+        state.images.length > 11
           ? { isLoading: false, btnMore: true }
-          : { isLoading: false, btnMore: false, message: true }
+          : {
+              isLoading: false,
+              btnMore: false,
+              message: "Sorry, that's all we found.",
+            }
       );
     }
   };
@@ -64,8 +72,30 @@ export class App extends Component {
     }
   };
 
-  loadMore = event => {
-    console.log(event);
+  loadMore = async () => {
+    const nextPage = this.state.pageNr;
+    const allImages = this.state.images.length;
+
+    try {
+      await this.setState({
+        btnMore: false,
+        message: false,
+        pageNr: nextPage + 1,
+      });
+      const nextImages = await getAllItem(
+        this.state.searching,
+        this.state.pageNr
+      );
+      await this.setState({ images: this.state.images.concat(nextImages) });
+    } catch (error) {
+      this.setState({ message: "Sorry, something's wrong" });
+    } finally {
+      this.setState(state =>
+        state.images.length > allImages + 11
+          ? { btnMore: true }
+          : { btnMore: false, message: "Sorry, that's all we found." }
+      );
+    }
   };
 
   render() {
@@ -90,17 +120,9 @@ export class App extends Component {
             />
           )}
         </div>
-        {message === true && (
-          <div className={css.message}>
-            Sorry, there are no images matching your search query. Please try
-            again.
-          </div>
-        )}
+        {message && <div className={css.message}>{message}</div>}
         {btnMore === true && <Button loadMore={this.loadMore} />}
       </>
     );
-  }
-  componentDidCatch() {
-    console.log('hey');
   }
 }
