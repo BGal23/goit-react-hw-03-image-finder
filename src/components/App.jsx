@@ -58,7 +58,6 @@ export class App extends Component {
       modalImg: event.target.srcset,
       alt: event.target.alt,
     });
-    window.addEventListener('keydown', this.modalClose);
   };
 
   modalClose = event => {
@@ -68,7 +67,6 @@ export class App extends Component {
         modalImg: '',
         alt: '',
       });
-      window.removeEventListener('keydown', this.modalClose);
     }
   };
 
